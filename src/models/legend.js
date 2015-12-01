@@ -20,6 +20,7 @@ nv.models.legend = function() {
         , dispatch = d3.dispatch('legendClick', 'legendDblclick', 'legendMouseover', 'legendMouseout', 'stateChange')
         , vers = 'classic' //Options are "classic" and "furious"
         , reverse = false
+        , disableToggle = false
         ;
 
     function chart(selection) {
@@ -94,12 +95,15 @@ nv.models.legend = function() {
 
             series
                 .on('mouseover', function(d,i) {
+                    if (disableToggle) { return; }
                     dispatch.legendMouseover(d,i);  //TODO: Make consistent with other event objects
                 })
                 .on('mouseout', function(d,i) {
+                    if (disableToggle) { return; }
                     dispatch.legendMouseout(d,i);
                 })
                 .on('click', function(d,i) {
+                    if (disableToggle) { return; }
                     dispatch.legendClick(d,i);
                     // make sure we re-get data in case it was modified
                     var data = series.data();
@@ -145,6 +149,7 @@ nv.models.legend = function() {
                     }
                 })
                 .on('dblclick', function(d,i) {
+                    if (disableToggle) { return; }
                     if(vers == 'furious' && expanded) return;
                     dispatch.legendDblclick(d,i);
                     if (updateState) {
@@ -363,6 +368,7 @@ nv.models.legend = function() {
         expanded:   {get: function(){return expanded;}, set: function(_){expanded=_;}},
         vers:   {get: function(){return vers;}, set: function(_){vers=_;}},
         reverse:    {get: function(){return reverse;}, set: function(_){reverse=_;}},
+        disableToggle: {get: function(){return disableToggle;}, set: function(_){disableToggle=_;}},
 
         // options that require extra logic in the setter
         margin: {get: function(){return margin;}, set: function(_){
