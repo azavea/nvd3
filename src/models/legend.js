@@ -19,6 +19,7 @@ nv.models.legend = function() {
         , expanded = false
         , dispatch = d3.dispatch('legendClick', 'legendDblclick', 'legendMouseover', 'legendMouseout', 'stateChange')
         , vers = 'classic' //Options are "classic" and "furious"
+        , reverse = false
         ;
 
     function chart(selection) {
@@ -178,13 +179,13 @@ nv.models.legend = function() {
                 var seriesWidths = [];
                 series.each(function(d,i) {
                     var legendText;
-                    if (getKey(d).length > maxKeyLength) { 
+                    if (getKey(d).length > maxKeyLength) {
                         var trimmedKey = getKey(d).substring(0, maxKeyLength);
                         legendText = d3.select(this).select('text').text(trimmedKey + "...");
                         d3.select(this).append("svg:title").text(getKey(d));
                     } else {
                         legendText = d3.select(this).select('text');
-                    } 
+                    }
                     var nodeTextLength;
                     try {
                         nodeTextLength = legendText.node().getComputedTextLength();
@@ -229,7 +230,8 @@ nv.models.legend = function() {
                 }
 
                 series
-                    .attr('transform', function(d, i) {
+                    .attr('transform', function(d, j) {
+                        var i = reverse ? (seriesText[0].length - j - 1) : j;
                         return 'translate(' + xPositions[i % seriesPerRow] + ',' + (5 + Math.floor(i / seriesPerRow) * versPadding) + ')';
                     });
 
@@ -360,6 +362,7 @@ nv.models.legend = function() {
         radioButtonMode:    {get: function(){return radioButtonMode;}, set: function(_){radioButtonMode=_;}},
         expanded:   {get: function(){return expanded;}, set: function(_){expanded=_;}},
         vers:   {get: function(){return vers;}, set: function(_){vers=_;}},
+        reverse:    {get: function(){return reverse;}, set: function(_){reverse=_;}},
 
         // options that require extra logic in the setter
         margin: {get: function(){return margin;}, set: function(_){
