@@ -243,6 +243,10 @@ nv.models.multiBarChart = function() {
                         .attr("transform", function(d,i) {
                             return getTranslate(0, (i === 0 || totalInBetweenTicks % 2 !== 0) ? staggerDown : staggerUp);
                         });
+                } else if (!staggerLabels) {
+                    xTicks
+                        .selectAll("text")
+                        .attr('transform', null);
                 }
 
                 if (wrapLabels) {
