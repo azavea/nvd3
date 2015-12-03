@@ -209,8 +209,10 @@ nv.models.legend = function() {
                 legendWidth = 0;
 
                 while ( legendWidth < availableWidth && seriesPerRow < seriesWidths.length) {
-                    columnWidths[seriesPerRow] = seriesWidths[seriesPerRow];
-                    legendWidth += seriesWidths[seriesPerRow++];
+                    var i = reverse ? seriesWidths.length - seriesPerRow - 1 : seriesPerRow;
+                    columnWidths[seriesPerRow] = seriesWidths[i];
+                    legendWidth += seriesWidths[i];
+                    seriesPerRow++;
                 }
                 if (seriesPerRow === 0) seriesPerRow = 1; //minimum of one series per row
 
